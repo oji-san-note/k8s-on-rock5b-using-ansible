@@ -1,0 +1,39 @@
+- name: set hostname
+  become: yes
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: set timezone to JST
+  become: yes
+  community.general.timezone:
+    name: Asia/Tokyo
+
+- name: install basic packages
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg: ['ethtool','nvme-cli','rsync','smartmontools','zstd','golang-go','librbd1','armbian-config',
+          'dnsutils','libssl-dev','ldnsutils','net-tools','tmux','whois','vim','git','binutils','jq',
+          'telnet','tree','curl','wget','gnupg','gpg-agent','rsyslog','tzdata', 'gdisk']
+
+- name: disable ipv6
+  become: yes
+  community.general.nmcli:
+    conn_name: "Wired connection 1"
+    ifname: "{{ item }}"
+    method6: disabled
+    state: present
+  loop: "{{ ansible_interfaces | reject('search','lo') }}"
+
+- name: modify dns
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/resolved.conf
+    backrefs: yes
+    regexp: "^(DNS=.*)"
+    line: '#\1'
+
+- name: reboot
+  become: yes
+  ansible.builtin.reboot:
+    reboot_timeout: 300

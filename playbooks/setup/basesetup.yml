@@ -1,0 +1,10 @@
+- name: base setup
+  hosts: all
+  become: true
+  roles:
+    - role: setup_base_pkgs
+      tags: setup_base_pkgs
+    - role: init_nvme
+      tags: init_nvme
+    - role: setup_kubeadm
+      tags: setup_kubeadm

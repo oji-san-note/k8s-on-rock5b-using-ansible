@@ -1,0 +1,5 @@
+- name: init nvme
+  become: true
+  ansible.builtin.shell:
+    cmd: blkdiscard -f /dev/nvme0n1
+  when: inventory_hostname in groups['nodes']

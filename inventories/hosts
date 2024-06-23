@@ -1,0 +1,19 @@
+[all:children]
+masters
+nodes
+
+[rpi4b:children]
+masters
+
+[rock5b:children]
+nodes
+
+[masters]
+m240.offline.to ansible_user=ops ansible_connection=ssh
+
+[nodes]
+n230.offline.to ansible_user=ops ansible_connection=ssh
+n231.offline.to ansible_user=ops ansible_connection=ssh
+n232.offline.to ansible_user=ops ansible_connection=ssh
+n233.offline.to ansible_user=ops ansible_connection=ssh
+n234.offline.to ansible_user=ops ansible_connection=ssh
